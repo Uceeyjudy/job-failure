@@ -1,25 +1,17 @@
+version: 2.1
+
 jobs:
-  save_hello_world_output:
+  my_job:
     docker:
       - image: circleci/node:13.8.0
     steps:
-      - run: echo "hello world" > ~/output.txt
-      - persist_to_workspace:
-          root: ~/
-          paths:
-            - output.txt
-    steps:
+      - run: exit 1
       - run:
-          name: Testing application
-          command: make test
-          shell: /bin/bash
-          working_directory: ~/my-app
-          no_output_timeout: 30m
-          environment:
-          FOO: bar
-
-
-      - run:
-          name: Return Failed Tests
-          command: curl --data fail_tests.log http://example.com/error_logs
+          name: on error
+          command: echo "Hello Error!"
           when: on_fail
+
+workflows:
+  my_workflow:
+    jobs:
+      - my_job
